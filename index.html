@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سوفیا | محصولات آرایشی و بهداشتی</title>
+    <meta name="description" content="فروشگاه سوفیا ارائه‌دهنده محصولات لوکس آرایشی و بهداشتی با کیفیت بالا و طراحی حرفه‌ای.">
+    <meta name="keywords" content="رژ لب, کرم پودر, محصولات آرایشی, فروشگاه لوکس, سوفیا">
+    <meta name="author" content="Sophia Cosmetics">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="logo.png" type="image/png">
+</head>
+<body>
+  <!-- هدر -->
+  <header>
+    <div class="name"><a href="#">سوفیا</a></div>
+    <div class="menu">
+      <a href="#">خانه</a>
+      <a href="#">محصولات</a>
+      <a href="#">تماس</a>
+    </div>
+    <div class="cart-icon">
+      🛒 <span id="cart-count-header">0</span>
+    </div>
+  </header>
+  <div id="search-bar">
+    <input type="text" id="searchInput" placeholder="🔍 جستجو محصول..." />
+    <button onclick="searchProducts()">جستجو</button>
+  </div>
+
+  <!-- اسلایدر -->
+  <div class="slider">
+      <img id="img1" src="/بکگراند.jpg" alt="عکس اول">
+      <img id="img2" src="/bac.jpg" alt="عکس دوم">
+  </div>
+
+  <!-- دسته‌بندی‌ها -->
+  <nav>
+      <button onclick="showCategory('makup')">میکاپ</button>
+      <button onclick="showCategory('skin')">مراقبت پوست</button>
+      <button onclick="showCategory('hair')">مراقبت مو</button>
+      <button onclick="showCategory('shakhsi')">بهداشت شخصی</button>
+      <button onclick="showCategory('ater')">عطر و رایحه</button>
+  </nav>
+
+  <!-- محصولات -->
+<div id="product-grid" class="product-grid">
+  <div class="skeleton"></div>
+  <div class="skeleton"></div>
+  <div class="skeleton"></div>
+</div>
+
+
+  <!-- سبد خرید -->
+  <div id="cart">
+    <h2>🛒 سبد خرید شما (<span id="cart-count-cart">0</span>)</h2>
+    <ul id="cart-items"></ul>
+    <div class="total" id="cart-total"></div>
+    <button onclick="clearCart()">🗑️ پاک کردن کل سبد</button>
+    <button onclick="showCheckout()">📦 مرور سفارش</button>
+  </div>
+
+  <section id="checkout" style="display:none;">
+  <h2>🛒 تسویه حساب</h2>
+
+  <!-- Progress Bar -->
+  <div id="progress-bar">
+    <div class="step active">سبد خرید</div>
+    <div class="step">پرداخت</div>
+    <div class="step">تأیید سفارش</div>
+  </div>
+
+  <!-- فرم اطلاعات کاربر -->
+  <form id="checkoutForm">
+    <label>نام:</label>
+    <input type="text" required>
+
+    <label>آدرس:</label>
+    <input type="text" required>
+
+    <label>ایمیل:</label>
+    <input type="email" required>
+
+    <button type="submit">ادامه</button>
+  </form>
+  </section>
+
+  <!-- Checkout -->
+  <div id="checkout" style="display:none;">
+    <h2>✅ مرور سفارش</h2>
+    <ul id="checkout-items"></ul>
+    <div class="total" id="checkout-total"></div>
+    <button onclick="confirmOrder()">تأیید سفارش</button>
+  </div>
+
+  <!-- پروفایل -->
+  <section id="profile">
+    <h2>👤 پروفایل کاربر</h2>
+    <form id="profileForm">
+      <input type="text" placeholder="نام">
+      <input type="email" placeholder="ایمیل">
+      <button type="submit">ذخیره</button>
+    </form>
+  </section>
+
+  <!-- پیام‌ها -->
+  <section id="messages">
+    <h2>💬 پیام‌های شما</h2>
+    <ul id="messages-list"></ul>
+  </section>
+
+  <!-- وبلاگ -->
+  <section id="blog">
+    <h2>📝 وبلاگ و مقالات آموزشی</h2>
+    <div class="blog-posts" id="blog-posts"></div>
+    <form id="blogForm">
+      <input type="text" id="blogTitle" placeholder="عنوان مقاله" required>
+      <textarea id="blogContent" placeholder="محتوا" required></textarea>
+      <button type="submit">انتشار مقاله</button>
+    </form>
+  </section>
+
+  <!-- تماس با ما -->
+  <section id="contact">
+    <h2>📩 تماس با ما</h2>
+    <form id="contactForm">
+      <input type="text" id="contactName" placeholder="نام" required>
+      <input type="email" id="contactEmail" placeholder="ایمیل" required>
+      <textarea id="contactMessage" placeholder="پیام" required></textarea>
+      <button type="submit">ارسال پیام</button>
+    </form>
+    <ul id="contactMessages"></ul>
+  </section>
+
+  <!-- دکمه حالت تاریک -->
+  <div id="theme-switch">
+    <button onclick="toggleTheme()">🌙 حالت تاریک / ☀️ حالت روشن</button>
+  </div>
+  <div id="toast"></div>
+  <button id="scrollTopBtn">⬆️ بالا</button>
+
+  <script src="/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سوفیا | فروشگاه آرایشی و بهداشتی</title>
+<style>
+:root{
+  --primary:#2B1E33;--accent:#D4AF37;--bg:#F7F5F2;--text:#1C1C1C;--muted:#8A7F8E;--white:#fff;
+  --card:#ffffff;--line:#e8e4dc;--soft:#f9f6f2;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:"IRANSansX","Inter",system-ui}
+.container{max-width:1200px;margin:auto;padding:0 20px}
+.site-header{background:var(--white);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{font-family:"Playfair Display","Vazirmatn",serif;font-size:24px;color:var(--primary);text-decoration:none}
+.nav a{margin:0 10px;color:#333;text-decoration:none}
+.nav .pill{padding:8px 14px;border:1px solid var(--primary);border-radius:999px}
+.counters{display:flex;gap:10px}
+.counter{font-size:13px;color:#555;background:#f5f2ea;border:1px solid var(--line);padding:4px 8px;border-radius:999px}
+.hero{background:linear-gradient(135deg,#f9f6f2,#f1eee7);padding:46px 0;border-bottom:1px solid var(--line)}
+.hero-inner{display:grid;grid-template-columns:1.2fr 0.8fr;gap:24px;align-items:center}
+.hero-text h1{font-size:32px;margin:0 0 8px;color:var(--primary)}
+.hero-text p{color:#4a4a4a;margin:0 0 16px}
+.btn{display:inline-block;padding:10px 14px;border-radius:12px;text-decoration:none;transition:.2s;cursor:pointer;font-size:14px}
+.btn-primary{background:var(--primary);color:var(--white)}
+.btn-outline{border:1px solid var(--primary);color:var(--primary);background:transparent}
+.btn-soft{background:#efe8f7;color:#4a3660}
+.btn:hover{transform:translateY(-1px)}
+.section{display:none;padding:20px 0}
+.section.active{display:block}
+.filters{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0}
+.filter-group{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:8px;align-items:center}
+.filter-group label{color:#555;font-size:13px}
+.select,.input{padding:8px 10px;border:1px solid #ddd;border-radius:10px;background:#fafafa}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.card img{width:100%;height:180px;object-fit:cover;background:#eee}
+.card .content{padding:12px}
+.card .brand{color:var(--muted);font-size:13px}
+.card .title{font-size:16px;margin:6px 0;color:#2c2c2c}
+.card .meta{display:flex;justify-content:space-between;align-items:center}
+.price{font-weight:600;color:var(--primary)}
+.rating{color:#8c6aa8;font-size:13px}
+.card .actions{margin-top:10px;display:flex;gap:8px}
+.tag{background:#f4f0f8;border:1px solid #e8ddf4;padding:2px 6px;border-radius:8px;font-size:12px}
+.pagination{display:flex;gap:8px;justify-content:center;margin:20px 0}
+.page-btn{padding:8px 12px;border-radius:10px;border:1px solid #ddd;background:#fff;cursor:pointer}
+.page-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}
+.list{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.list-item{border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;gap:10px;align-items:center;background:#fff}
+.list-item img{width:64px;height:64px;border-radius:8px;object-fit:cover}
+.list-item .title{font-size:14px}
+.list-item .price{font-weight:600}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:50}
+.modal{width:min(860px,92vw);background:#fff;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+.modal-body{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.modal-footer{padding:12px 16px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.close{background:#f4f0f8;border:1px solid #e8ddf4}
+.site-footer{border-top:1px solid var(--line);background:#fff;margin-top:40px}
+.footer-inner{display:flex;justify-content:space-between;align-items:flex-start;padding:24px 0}
+.footer-links a{margin-left:12px;color:#555;text-decoration:none}
+@media(max-width:992px){.grid{grid-template-columns:repeat(3,1fr)}.hero-inner{grid-template-columns:1fr}.modal-body{grid-template-columns:1fr}}
+@media(max-width:640px){.grid{grid-template-columns:repeat(2,1fr)}.nav{display:none}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#/home">سوفیا</a>
+    <nav class="nav">
+      <a href="#/home">خانه</a>
+      <a href="#/category/makeup">آرایش</a>
+      <a href="#/category/skincare">پوست</a>
+      <a href="#/category/haircare">مو</a>
+      <a href="#/category/hygiene">بهداشت</a>
+      <a href="#/category/fragrance">عطر</a>
+      <a href="#/favorites">علاقه‌مندی‌ها</a>
+      <a href="#/cart" class="pill">سبد</a>
+      <a href="#/about">درباره</a>
+      <a href="#/contact">تماس</a>
+    </nav>
+    <div class="counters">
+      <span id="cartCount" class="counter">سبد: 0</span>
+      <span id="favCount" class="counter">علاقه‌مندی: 0</span>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-text">
+      <h1>زیبایی لوکس با سوفیا</h1>
+      <p>منتخب برندهای معتبر آرایشی و بهداشتی با تجربه‌ی خرید دلنشین و شفاف.</p>
+      <div class="hero-actions">
+        <a href="#/category/makeup" class="btn btn-primary">مشاهده آرایش</a>
+        <a href="#/category/skincare" class="btn btn-outline">مراقبت پوست</a>
+      </div>
+    </div>
+    <div class="hero-art" style="height:220px;border-radius:16px;background:
+      radial-gradient(80% 60% at 20% 40%, #fff 0%, #f2efe9 60%, transparent 100%),
+      conic-gradient(from 30deg at 70% 50%, #EADDD0, #C9B6D6, #EADDD0)">
+    </div>
+  </div>
+</section>
+
+<main class="container">
+  <!-- بخش فیلتر و شبکه محصولات -->
+  <section id="shop" class="section active">
+    <div id="filters" class="filters"></div>
+    <div id="product-grid" class="grid"></div>
+    <div id="pagination" class="pagination"></div>
+  </section>
+
+  <!-- علاقه‌مندی‌ها -->
+  <section id="favorites" class="section">
+    <h2>علاقه‌مندی‌ها</h2>
+    <div id="favList" class="list"></div>
+  </section>
+
+  <!-- سبد خرید -->
+  <section id="cart" class="section">
+    <h2>سبد خرید</h2>
+    <div id="cartList" class="list"></div>
+    <div class="panel" style="margin-top:16px;display:flex;justify-content:space-between;align-items:center">
+      <div>جمع کل: <strong id="cartTotal">0 تومان</strong></div>
+      <div><button class="btn btn-primary" onclick="alert('ثبت سفارش نمایشی')">ثبت سفارش</button></div>
+    </div>
+  </section>
+
+  <!-- درباره ما -->
+  <section id="about" class="section">
+    <div class="panel">
+      <h2>درباره سوفیا</h2>
+      <p>سوفیا ترکیبی از زیبایی و اصالت است. هدف ما ارائه‌ی تجربه‌ای لوکس، قابل اعتماد و دلنشین در خرید محصولات آرایشی و بهداشتی است.</p>
+      <p>در طراحی برند سوفیا، هارمونی رنگ‌ها، تایپوگرافی ظریف و چیدمان شفاف اولویت داشته است تا اعتماد و لذت بصری را هم‌زمان منتقل کند.</p>
+    </div>
+  </section>
+
+  <!-- تماس -->
+  <section id="contact" class="section">
+    <div class="panel">
+      <h2>تماس با ما</h2>
+      <form onsubmit="event.preventDefault();alert('پیام شما ثبت شد (نمایشی)')">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <input class="input" type="text" placeholder="نام">
+          <input class="input" type="email" placeholder="ایمیل">
+        </div>
+        <textarea class="input" style="width:100%;margin-top:12px;height:120px" placeholder="پیام شما"></textarea>
+        <div style="margin-top:12px"><button class="btn btn-primary">ارسال</button></div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="brand">سوفیا</span>
+      <p>© 2025 سوفیا – زیبایی با اصالت.</p>
+    </div>
+    <div class="footer-links">
+      <a href="#/about">درباره</a>
+      <a href="#/contact">تماس</a>
+      <a href="#/home">خانه</a>
+    </div>
+  </div>
+</footer>
+
+<!-- مودال جزئیات محصول -->
+<div id="modalBackdrop" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <div id="modalTitle"></div>
+      <button class="btn close" onclick="closeModal()">بستن</button>
+    </div>
+    <div class="modal-body">
+      <img id="modalImage" src="" alt="" style="width:100%;border-radius:12px;border:1px solid var(--line)">
+      <div>
+        <div id="modalBrand" style="color:#777;margin-bottom:6px"></div>
+        <div id="modalPrice" class="price" style="font-size:20px;margin:8px 0"></div>
+        <div id="modalRating" style="margin:6px 0"></div>
+        <p id="modalDesc" style="line-height:1.8"></p>
+        <div id="modalTags" style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"></div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button id="modalAddCart" class="btn btn-primary">افزودن به سبد</button>
+          <button id="modalToggleFav" class="btn btn-soft">افزودن به علاقه‌مندی</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+/* --------- داده‌ها: 200 محصول برند --------- */
+const CATEGORIES = [
+  {key:"makeup",     name:"آرایش"},
+  {key:"skincare",   name:"مراقبت پوست"},
+  {key:"haircare",   name:"مراقبت مو"},
+  {key:"hygiene",    name:"بهداشت شخصی"},
+  {key:"fragrance",  name:"عطر و ادکلن"},
+];
+const BRANDS = [
+  "Dior","Chanel","Lancôme","Estée Lauder","Fenty Beauty","Huda Beauty","NARS","MAC",
+  "L'Oréal","Kérastase","The Ordinary","CeraVe","La Roche-Posay","Bioderma","Neutrogena","Dove",
+  "YSL Beauty","Tom Ford","Gucci","Versace"
+];
+const NAMES_BY_CAT = {
+  makeup: ["رژ لب مخملی","پک سایه 12 رنگ","فاندیشن بلندکاور","ریمل حجم‌دهنده","هایلایتر شاین","مداد ابرو دقیق"],
+  skincare: ["سرم ویتامین C","کرم مرطوب‌کننده","تونر متعادل‌کننده","اسنس هیالورونیک","کرم دور چشم","ماسک بازسازی"],
+  haircare: ["شامپو ترمیمی","نرم‌کننده مغذی","ماسک کراتین","سرم مو ضد وز","اسپری محافظ حرارت","روغن آرگان"],
+  hygiene: ["ژل شست‌وشو بدن","مام رول ضدتعریق","صابون کرمی","خمیر دندان سفیدکننده","دهان‌شویه ملایم","اسکراب بدن"],
+  fragrance: ["ادوتویلت زنانه","ادوپرفیوم مردانه","ست مینیاتوری","اسپری بدن","عطر نیش","عطر جیبی"]
+};
+const IMG_BY_CAT = {
+  makeup:"https://picsum.photos/seed/makeup/600/400",
+  skincare:"https://picsum.photos/seed/skincare/600/400",
+  haircare:"https://picsum.photos/seed/haircare/600/400",
+  hygiene:"https://picsum.photos/seed/hygiene/600/400",
+  fragrance:"https://picsum.photos/seed/fragrance/600/400"
+};
+const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+const pick=arr=>arr[rand(0,arr.length-1)];
+function priceByCat(cat){
+  switch(cat){
+    case "makeup": return rand(390,1890);
+    case "skincare": return rand(490,2490);
+    case "haircare": return rand(350,1990);
+    case "hygiene": return rand(210,1290);
+    case "fragrance": return rand(1590,6990);
+    default: return rand(300,2000);
+  }
+}
+const PRODUCTS = (() => {
+  const list = [];
+  const perCat = 40; // 5 دسته * 40 = 200
+  CATEGORIES.forEach(cat=>{
+    for(let i=0;i<perCat;i++){
+      const brand = pick(BRANDS);
+      const title = `${pick(NAMES_BY_CAT[cat.key])} ${brand}`;
+      list.push({
+        id: `${cat.key}-${i+1}`,
+        title,
+        brand,
+        category: cat.key,
+        categoryName: cat.name,
+        price: priceByCat(cat.key),
+        rating: (rand(38,50)/10), // 3.8 تا 5.0
+        reviews: rand(12,420),
+        stock: rand(0,60),
+        image: `${IMG_BY_CAT[cat.key]}?v=${i}`,
+        description: `توضیحات ${title} با فرمول حرفه‌ای و کیفیت ممتاز برای تجربه‌ای لوکس.`,
+        tags: ["جدید","پرفروش","اورجینال"].slice(0,rand(1,3))
+      });
+    }
+  });
+  return list;
+})();
+
+/* --------- حالت‌ها و ذخیره محلی --------- */
+const PER_PAGE = 24;
+let state = {
+  query:"",
+  category:null,
+  brand:"",
+  sort:"popular", // popular | price-asc | price-desc | rating
+  priceMin:"",
+  priceMax:"",
+  page:1
+};
+const store = {
+  get(k,def){try{const v=JSON.parse(localStorage.getItem(k));return v??def}catch{ return def }},
+  set(k,v){localStorage.setItem(k,JSON.stringify(v))}
+};
+let cart = store.get("sofia_cart",[]);
+let favs = store.get("sofia_favs",[]);
+
+/* --------- روتینگ هشی --------- */
+window.addEventListener("hashchange",route);
+document.addEventListener("DOMContentLoaded",()=>{route(); renderFilters(); render(); updateCounters();});
+
+/* --------- فیلترها --------- */
+function renderFilters(){
+  const container=document.getElementById("filters");
+  if(!container) return;
+  const brands=[...new Set(PRODUCTS.map(p=>p.brand))].sort();
+  container.innerHTML = `
+    <div class="filter-group">
+      <label>جست‌وجو:</label>
+      <input id="q" class="input" type="search" placeholder="نام یا برند..." value="${state.query}"/>
+    </div>
+    <div class="filter-group">
+      <label>برند:</label>
+      <select id="brand" class="select">
+        <option value="">همه</option>
+        ${brands.map(b=>`<option value="${b}" ${state.brand===b?'selected':''}>${b}</option>`).join("")}
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>قیمت از:</label>
+      <input id="pmin" class="input" type="number" min="0" placeholder="حداقل" value="${state.priceMin}">
+      <label>تا:</label>
+      <input id="pmax" class="input" type="number" min="0" placeholder="حداکثر" value="${state.priceMax}">
+    </div>
+    <div class="filter-group">
+      <label>مرتب‌سازی:</label>
+      <select id="sort" class="select">
+        <option value="popular" ${state.sort==='popular'?'selected':''}>محبوبیت</option>
+        <option value="price-asc" ${state.sort==='price-asc'?'selected':''}>قیمت ↑</option>
+        <option value="price-desc" ${state.sort==='price-desc'?'selected':''}>قیمت ↓</option>
+        <option value="rating" ${state.sort==='rating'?'selected':''}>امتیاز</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>دسته:</label>
+      <select id="category" class="select">
+        <option value="">همه</option>
+        ${CATEGORIES.map(c=>`<option value="${c.key}" ${state.category===c.key?'selected':''}>${c.name}</option>`).join("")}
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>نتایج در صفحه:</label>
+      <select id="perpage" class="select">
+        <option value="12">12</option>
+        <option value="24" selected>24</option>
+        <option value="36">36</option>
+      </select>
+    </div>
+  `;
+  container.querySelector("#q").addEventListener("input", e=>{state.query=e.target.value.trim();state.page=1;render()});
+  container.querySelector("#brand").addEventListener("change", e=>{state.brand=e.target.value;state.page=1;render()});
+  container.querySelector("#pmin").addEventListener("change", e=>{state.priceMin=e.target.value;state.page=1;render()});
+  container.querySelector("#pmax").addEventListener("change", e=>{state.priceMax=e.target.value;state.page=1;render()});
+  container.querySelector("#sort").addEventListener("change", e=>{state.sort=e.target.value;render()});
+  container.querySelector("#category").addEventListener("change", e=>{state.category=e.target.value||null;state.page=1;render()});
+  container.querySelector("#perpage").addEventListener("change", e=>{window._perPage=parseInt(e.target.value,10)||PER_PAGE;state.page=1;render()});
+}
+
+/* --------- اعمال فیلتر، رندر شبکه و صفحه‌بندی --------- */
+window._perPage = PER_PAGE;
+function applyFilters(){
+  let list = PRODUCTS.slice();
+  if(state.category) list = list.filter(p=>p.category===state.category);
+  if(state.query){
+    const q = state.query.toLowerCase();
+    list = list.filter(p=>p.title.toLowerCase().includes(q) || p.brand.toLowerCase().includes(q));
+  }
+  if(state.brand) list = list.filter(p=>p.brand===state.brand);
+  const min = parseInt(state.priceMin||0,10);
+  const max = parseInt(state.priceMax||999999,10);
+  list = list.filter(p=>p.price>=min && p.price<=max);
+
+  switch(state.sort){
+    case "price-asc":  list.sort((a,b)=>a.price-b.price); break;
+    case "price-desc": list.sort((a,b)=>b.price-a.price); break;
+    case "rating":     list.sort((a,b)=>b.rating-a.rating); break;
+    default:           list.sort((a,b)=>b.reviews-a.reviews);
+  }
+  return list;
+}
+function render(){
+  const grid = document.getElementById("product-grid");
+  const pager = document.getElementById("pagination");
+  if(!grid) return;
+
+  const filtered = applyFilters();
+  const total = filtered.length;
+  const pages = Math.max(1, Math.ceil(total/window._perPage));
+  if(state.page>pages) state.page = pages;
+  const start = (state.page-1)*window._perPage;
+  const items = filtered.slice(start, start+window._perPage);
+
+  grid.innerHTML = items.map(cardTemplate).join("");
+  pager.innerHTML = Array.from({length:pages},(_,i)=>i+1).map(n=>`
+    <button class="page-btn ${n===state.page?'active':''}" data-p="${n}">${n}</button>
+  `).join("");
+  pager.querySelectorAll(".page-btn").forEach(b=>{
+    b.addEventListener("click", ()=>{state.page=parseInt(b.dataset.p,10);render()})
+  });
+}
+function cardTemplate(p){
+  const priceStr = new Intl.NumberFormat("fa-IR").format(p.price) + " تومان";
+  const star = "★".repeat(Math.round(p.rating)) + "☆".repeat(5-Math.round(p.rating));
+  const tags = p.tags.map(t=>`<span class="tag">${t}</span>`).join(" ");
+  const isFav = favs.includes(p.id);
+  return `
+    <article class="card">
+      <img src="${p.image}" alt="${p.title}" onclick="openModal('${p.id}')">
+      <div class="content">
+        <div class="brand">${p.brand} • ${p.categoryName}</div>
+        <h3 class="title">${p.title}</h3>
+        <div class="meta">
+          <span class="price">${priceStr}</span>
+          <span class="rating">${star} (${p.rating.toFixed(1)})</span>
+        </div>
+        <div style="margin-top:8px">${tags}</div>
+        <div class="actions">
+          <button class="btn btn-outline" onclick="openModal('${p.id}')">جزئیات</button>
+          <button class="btn btn-primary" onclick="addToCart('${p.id}')">افزودن به سبد</button>
+          <button class="btn btn-soft" onclick="toggleFav('${p.id}')">${isFav?'حذف علاقه':'افزودن علاقه'}</button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+/* --------- مودال جزئیات --------- */
+function openModal(id){
+  const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
+  document.getElementById("modalTitle").textContent = p.title;
+  document.getElementById("modalImage").src = p.image;
+  document.getElementById("modalImage").alt = p.title;
+  document.getElementById("modalBrand").textContent = `${p.brand} • ${p.categoryName}`;
+  document.getElementById("modalPrice").textContent = new Intl.NumberFormat("fa-IR").format(p.price) + " تومان";
+  document.getElementById("modalDesc").textContent = p.description;
+  document.getElementById("modalRating").textContent = `امتیاز: ${p.rating.toFixed(1)} | نظرات: ${p.reviews} | موجودی: ${p.stock}`;
+  document.getElementById("modalTags").innerHTML = p.tags.map(t=>`<span class="tag">${t}</span>`).join("");
+  document.getElementById("modalBackdrop").style.display="flex";
+  const addBtn = document.getElementById("modalAddCart");
+  addBtn.onclick = ()=>addToCart(id);
+  const favBtn = document.getElementById("modalToggleFav");
+  favBtn.textContent = favs.includes(id) ? "حذف از علاقه‌مندی" : "افزودن به علاقه‌مندی";
+  favBtn.onclick = ()=>{toggleFav(id); favBtn.textContent = favs.includes(id) ? "حذف از علاقه‌مندی" : "افزودن به علاقه‌مندی";}
+}
+function closeModal(){ document.getElementById("modalBackdrop").style.display="none"; }
+
+/* --------- سبد و علاقه‌مندی‌ها --------- */
+function addToCart(id){
+  const item = cart.find(x=>x.id===id);
+  if(item){ item.qty += 1; } else { cart.push({id,qty:1}); }
+  store.set("sofia_cart",cart);
+  updateCounters();
+  renderCart();
+}
+function removeFromCart(id){
+  cart = cart.filter(x=>x.id!==id);
+  store.set("sofia_cart",cart);
+  updateCounters();
+  renderCart();
+}
+function changeQty(id,qty){
+  const item = cart.find(x=>x.id===id);
+  if(!item) return;
+  item.qty = Math.max(1,qty);
+  store.set("sofia_cart",cart);
+  updateCounters();
+  renderCart();
+}
+function toggleFav(id){
+  if(favs.includes(id)) favs = favs.filter(x=>x!==id);
+  else favs.push(id);
+  store.set("sofia_favs",favs);
+  updateCounters();
+  render(); // به‌روزرسانی دکمه‌ها
+  renderFavs();
+}
+function renderFavs(){
+  const box=document.getElementById("favList"); if(!box) return;
+  const items = favs.map(fid=>PRODUCTS.find(p=>p.id===fid)).filter(Boolean);
+  box.innerHTML = items.length ? items.map(p=>`
+    <div class="list-item">
+      <img src="${p.image}" alt="${p.title}">
+      <div style="flex:1">
+        <div class="title">${p.title}</div>
+        <div class="brand">${p.brand} • ${p.categoryName}</div>
+        <div class="price">${new Intl.NumberFormat("fa-IR").format(p.price)} تومان</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="addToCart('${p.id}')">افزودن به سبد</button>
+        <button class="btn btn-soft" onclick="toggleFav('${p.id}')">حذف</button>
+      </div>
+    </div>
+  `).join("") : `<div class="panel">هنوز محصولی در علاقه‌مندی‌ها ندارید.</div>`;
+}
+function renderCart(){
+  const box=document.getElementById("cartList"); if(!box) return;
+  const items = cart.map(ci=>{
+    const p = PRODUCTS.find(x=>x.id===ci.id); if(!p) return null;
+    const price = p.price * ci.qty;
+    return {p,qty:ci.qty,price};
+  }).filter(Boolean);
+  box.innerHTML = items.length ? items.map(({p,qty,price})=>`
+    <div class="list-item">
+      <img src="${p.image}" alt="${p.title}">
+      <div style="flex:1">
+        <div class="title">${p.title}</div>
+        <div class="brand">${p.brand} • ${p.categoryName}</div>
+        <div class="price">${new Intl.NumberFormat("fa-IR").format(price)} تومان</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="input" type="number" min="1" value="${qty}" style="width:70px" onchange="changeQty('${p.id}',parseInt(this.value,10)||1)">
+        <button class="btn btn-soft" onclick="removeFromCart('${p.id}')">حذف</button>
+      </div>
+    </div>
+  `).join("") : `<div class="panel">سبد شما خالی است.</div>`;
+  const total = items.reduce((s,x)=>s+x.price,0);
+  document.getElementById("cartTotal").textContent = new Intl.NumberFormat("fa-IR").format(total) + " تومان";
+}
+function updateCounters(){
+  document.getElementById("cartCount").textContent = "سبد: " + cart.reduce((s,x)=>s+x.qty,0);
+  document.getElementById("favCount").textContent = "علاقه‌مندی: " + favs.length;
+}
+
+/* --------- روتینگ و نمایش بخش‌ها --------- */
+function route(){
+  const hash = location.hash || "#/home";
+  const [, base, param] = hash.split("/");
+  // نمایش بخش‌ها
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("shop").classList.add("active"); // پیش‌فرض: فروشگاه با فیلترها
+  if(base==="category"){
+    state.category = param || null;
+    state.page=1;
+    renderFilters(); render();
+  } else if(base==="favorites"){
+    document.getElementById("favorites").classList.add("active");
+    document.getElementById("shop").classList.remove("active");
+    renderFavs();
+  } else if(base==="cart"){
+    document.getElementById("cart").classList.add("active");
+    document.getElementById("shop").classList.remove("active");
+    renderCart();
+  } else if(base==="about"){
+    document.getElementById("about").classList.add("active");
+    document.getElementById("shop").classList.remove("active");
+  } else if(base==="contact"){
+    document.getElementById("contact").classList.add("active");
+    document.getElementById("shop").classList.remove("active");
+  } else {
+    // home
+    state.category=null;
+    renderFilters(); render();
+  }
+}
+</script>
+</body>
+</html>
