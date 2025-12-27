@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سوفیا | محصولات آرایشی و بهداشتی</title>
-    <meta name="description" content="فروشگاه سوفیا ارائه‌دهنده محصولات لوکس آرایشی و بهداشتی با کیفیت بالا و طراحی حرفه‌ای.">
-    <meta name="keywords" content="رژ لب, کرم پودر, محصولات آرایشی, فروشگاه لوکس, سوفیا">
-    <meta name="author" content="Sophia Cosmetics">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="logo.png" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سوفیا | محصولات آرایشی و بهداشتی</title>
+  <meta name="description" content="فروشگاه سوفیا ارائه‌دهنده محصولات لوکس آرایشی و بهداشتی با کیفیت بالا و طراحی حرفه‌ای.">
+  <meta name="keywords" content="رژ لب, کرم پودر, محصولات آرایشی, فروشگاه لوکس, سوفیا">
+  <meta name="author" content="Sophia Cosmetics">
+
+  <!-- فونت و استایل -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo.png" type="image/png">
 </head>
 <body>
   <!-- هدر -->
@@ -25,6 +26,8 @@
       🛒 <span id="cart-count-header">0</span>
     </div>
   </header>
+
+  <!-- جستجو -->
   <div id="search-bar">
     <input type="text" id="searchInput" placeholder="🔍 جستجو محصول..." />
     <button onclick="searchProducts()">جستجو</button>
@@ -32,26 +35,25 @@
 
   <!-- اسلایدر -->
   <div class="slider">
-      <img id="img1" src="/بکگراند.jpg" alt="عکس اول">
-      <img id="img2" src="/bac.jpg" alt="عکس دوم">
+    <img id="img1" src="بکگراند.jpg" alt="عکس اول">
+    <img id="img2" src="bac.jpg" alt="عکس دوم">
   </div>
 
   <!-- دسته‌بندی‌ها -->
   <nav>
-      <button onclick="showCategory('makup')">میکاپ</button>
-      <button onclick="showCategory('skin')">مراقبت پوست</button>
-      <button onclick="showCategory('hair')">مراقبت مو</button>
-      <button onclick="showCategory('shakhsi')">بهداشت شخصی</button>
-      <button onclick="showCategory('ater')">عطر و رایحه</button>
+    <button onclick="showCategory('makup')">میکاپ</button>
+    <button onclick="showCategory('skin')">مراقبت پوست</button>
+    <button onclick="showCategory('hair')">مراقبت مو</button>
+    <button onclick="showCategory('shakhsi')">بهداشت شخصی</button>
+    <button onclick="showCategory('ater')">عطر و رایحه</button>
   </nav>
 
   <!-- محصولات -->
-<div id="product-grid" class="product-grid">
-  <div class="skeleton"></div>
-  <div class="skeleton"></div>
-  <div class="skeleton"></div>
-</div>
-
+  <div id="product-grid" class="product-grid">
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+    <div class="skeleton"></div>
+  </div>
 
   <!-- سبد خرید -->
   <div id="cart">
@@ -62,38 +64,32 @@
     <button onclick="showCheckout()">📦 مرور سفارش</button>
   </div>
 
-  <section id="checkout" style="display:none;">
-  <h2>🛒 تسویه حساب</h2>
-
-  <!-- Progress Bar -->
-  <div id="progress-bar">
-    <div class="step active">سبد خرید</div>
-    <div class="step">پرداخت</div>
-    <div class="step">تأیید سفارش</div>
-  </div>
-
-  <!-- فرم اطلاعات کاربر -->
-  <form id="checkoutForm">
-    <label>نام:</label>
-    <input type="text" required>
-
-    <label>آدرس:</label>
-    <input type="text" required>
-
-    <label>ایمیل:</label>
-    <input type="email" required>
-
-    <button type="submit">ادامه</button>
-  </form>
+  <!-- تسویه حساب -->
+  <section id="checkout-form" style="display:none;">
+    <h2>🛒 تسویه حساب</h2>
+    <div id="progress-bar">
+      <div class="step active">سبد خرید</div>
+      <div class="step">پرداخت</div>
+      <div class="step">تأیید سفارش</div>
+    </div>
+    <form id="checkoutForm">
+      <label>نام:</label>
+      <input type="text" required>
+      <label>آدرس:</label>
+      <input type="text" required>
+      <label>ایمیل:</label>
+      <input type="email" required>
+      <button type="submit">ادامه</button>
+    </form>
   </section>
 
-  <!-- Checkout -->
-  <div id="checkout" style="display:none;">
+  <!-- مرور سفارش -->
+  <section id="checkout-review" style="display:none;">
     <h2>✅ مرور سفارش</h2>
     <ul id="checkout-items"></ul>
     <div class="total" id="checkout-total"></div>
     <button onclick="confirmOrder()">تأیید سفارش</button>
-  </div>
+  </section>
 
   <!-- پروفایل -->
   <section id="profile">
@@ -134,13 +130,15 @@
     <ul id="contactMessages"></ul>
   </section>
 
-  <!-- دکمه حالت تاریک -->
+  <!-- حالت تاریک -->
   <div id="theme-switch">
     <button onclick="toggleTheme()">🌙 حالت تاریک / ☀️ حالت روشن</button>
   </div>
+
   <div id="toast"></div>
   <button id="scrollTopBtn">⬆️ بالا</button>
 
+  <!-- اسکریپت -->
   <script src="script.js"></script>
 </body>
 </html>
