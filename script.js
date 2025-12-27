@@ -2,7 +2,7 @@ const products = {
   makup: [
     {
       name:"رژ لب کیکو",
-      image:"images/رژلبwebp.webp",
+      image:"/رژلبwebp.webp",
       desc:"ناموجود رژ لب مایع کیکو میلانو مدل Metal شماره 03",
       price:"150,000 تومان"
     },
