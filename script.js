@@ -230,59 +230,13 @@ const products = {
       desc:"بوی ملایم و با ماندگاری بالا",
       price:"148,000 تومان"
     },
-      ater: [
-    {
-      name:"ادو پرفیوم مردانه ابسنت",
-      image:"images/عطر مردانه.webp",
-      desc:"رایحه تلخ",
-      price:"348,000 تومان"
-    },
-    {
-      name:"ادوپرفیوم باکستر",
-      image:"images/عطر ادوپرفیوم.webp",
-      desc:"مناسب برای پاییز و زمستان",
-      price:"218,000 تومان"
-    },
-    {
-      name:"پرفیوم زنانه آتلیه کلون",
-      image:"images/عطر زنانه اتیله.webp",
-      desc:"ساختار رایحه خوراکی و تندی",
-      price:"13,880,000 تومان"
-    },
-    {
-      name:"ادو پرفیوم زنانه بولگاری",
-      image:"images/عطر زنانه ادو.webp",
-      desc:"ساختار نت ها گل",
-      price:"2,780,000 تومان"
-    },
-    {
-      name:"پرفیوم آتلیه کلون",
-      image:"images/عطر پرفیوم7.webp",
-      desc:"ساختار نت ها گل و مرکبات",
-      price:"12,800,000 تومان"
-    },
-    {
-      name:"ادو پرفیوم مردانه لوئیز آلاویا",
-      image:"images/عطر ادو مردانه.webp",
-      desc:"ساختار رایحه خنک و تلخ",
-      price:"3,188,000 تومان"
-    },
-    {
-      name:"بادی اسپلش زنانه پینک مدل کیتی",
-      image:"images/بادی اسپلش زنانه.webp",
-      desc:"ماندگاری بالا",
-      price:"48,000 تومان"
-    },
-    {
-      name:"بادی اسپلش 212 لابورن",
-      image:"images/بادی لابو.webp",
-      desc:"بوی ملایم و با ماندگاری بالا",
-      price:"148,000 تومان"
-    }
   ]
 };
 
+
+// -------------------- داده‌ها و وضعیت --------------------
 let cart = [];
+let searchResults = []; // نتایج جستجو برای افزودن به سبد
 
 // بازیابی سبد ذخیره‌شده
 const savedCart = localStorage.getItem("cart");
@@ -291,7 +245,7 @@ if (savedCart) {
   renderCart();
 }
 
-// نمایش محصولات یک دسته با Skeleton
+// -------------------- نمایش محصولات دسته (با Skeleton) --------------------
 function showCategory(category) {
   const grid = document.getElementById("product-grid");
 
@@ -302,10 +256,11 @@ function showCategory(category) {
     <div class="skeleton"></div>
   `;
 
-  // شبیه‌سازی تأخیر بارگذاری (۱.۵ ثانیه)
+  // شبیه‌سازی تأخیر بارگذاری
   setTimeout(() => {
     grid.innerHTML = "";
-    (products[category] || []).forEach((p, i) => {
+    const list = (products[category] || []);
+    list.forEach((p, i) => {
       grid.innerHTML += `
         <div class="product-card">
           <img src="${p.image}" alt="${p.name}" class="product-image">
@@ -319,18 +274,19 @@ function showCategory(category) {
         </div>
       `;
     });
-  ),3000;
+  }, 1500);
 }
 
-// افزودن محصول
+// -------------------- سبد خرید --------------------
 function addToCart(category, index) {
   const product = products[category][index];
   cart.push(product);
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
+  bumpCartIcon();
+  showToast(`${product.name} به سبد اضافه شد ✅`);
 }
 
-// حذف یک محصول
 function removeFromCart(category, index) {
   const product = products[category][index];
   const cartIndex = cart.findIndex(item => item.name === product.name);
@@ -338,17 +294,17 @@ function removeFromCart(category, index) {
     cart.splice(cartIndex, 1);
     localStorage.setItem("cart", JSON.stringify(cart));
     renderCart();
+    showToast(`${product.name} از سبد حذف شد ❌`);
   }
 }
 
-// پاک کردن کل سبد
 function clearCart() {
   cart = [];
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
+  showToast("سبد خرید پاک شد 🗑️");
 }
 
-// رندر سبد خرید
 function renderCart() {
   const cartList = document.getElementById("cart-items");
   const totalEl = document.getElementById("cart-total");
@@ -371,19 +327,45 @@ function renderCart() {
   countCart.textContent = cart.length;
 }
 
-// تبدیل قیمت به عدد
 function parsePrice(str) {
   return Number(str.replace("تومان", "").replace(/,/g, "").trim());
 }
 
-// فرمت عدد با ویرگول
 function formatPrice(num) {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-// -------------------- Checkout --------------------
+function bumpCartIcon() {
+  const icon = document.querySelector(".cart-icon");
+  icon.classList.add("bump");
+  setTimeout(() => icon.classList.remove("bump"), 300);
+}
+
+// -------------------- Checkout و Progress Bar --------------------
 function showCheckout() {
-  const checkoutSection = document.getElementById("checkout");
+  // نمایش فرم تسویه و تنظیم مرحله 0
+  const formSection = document.getElementById("checkout-form");
+  const reviewSection = document.getElementById("checkout-review");
+  formSection.style.display = "block";
+  reviewSection.style.display = "none";
+  goToStep(0);
+}
+
+function goToStep(stepIndex) {
+  const steps = document.querySelectorAll("#progress-bar .step");
+  steps.forEach((step, index) => {
+    step.classList.toggle("active", index === stepIndex);
+  });
+}
+
+// ارسال فرم Checkout → رفتن به مرحله پرداخت و نمایش مرور سفارش
+document.getElementById("checkoutForm").addEventListener("submit", e => {
+  e.preventDefault();
+  goToStep(1); // مرحله پرداخت
+
+  // آماده‌سازی مرور سفارش و نمایش
+  const reviewSection = document.getElementById("checkout-review");
+  const formSection = document.getElementById("checkout-form");
   const checkoutList = document.getElementById("checkout-items");
   const checkoutTotal = document.getElementById("checkout-total");
 
@@ -399,58 +381,54 @@ function showCheckout() {
     ? `جمع کل سفارش: ${formatPrice(total)} تومان`
     : "سفارشی وجود ندارد";
 
-  checkoutSection.style.display = "block";
-}
+  formSection.style.display = "none";
+  reviewSection.style.display = "block";
+
+  showToast("مرحله پرداخت ✨");
+});
 
 function confirmOrder() {
   goToStep(2); // مرحله تأیید سفارش
   alert("سفارش شما ثبت شد ✅");
   clearCart();
-  document.getElementById("checkout").style.display = "none";
+  // بستن هر دو بخش
+  document.getElementById("checkout-form").style.display = "none";
+  document.getElementById("checkout-review").style.display = "none";
 }
 
-// -------------------- Progress Bar --------------------
-function goToStep(stepIndex) {
-  const steps = document.querySelectorAll("#progress-bar .step");
-  steps.forEach((step, index) => {
-    step.classList.toggle("active", index === stepIndex);
-  });
-}
-
-// حرکت بین مراحل Checkout
-document.getElementById("checkoutForm").addEventListener("submit", e => {
-  e.preventDefault();
-  goToStep(1); // مرحله پرداخت
-  alert("مرحله پرداخت ✨");
-});
-
-// نمایش Toast Notification
+// -------------------- Toast --------------------
 function showToast(message) {
   const toast = document.getElementById("toast");
+  // اطمینان از داشتن کلاس‌های صحیح
+  toast.className = "toast";
   toast.textContent = message;
-  toast.className = "toast show";
-
+  // نمایش
+  requestAnimationFrame(() => {
+    toast.className = "toast show";
+  });
   // مخفی شدن بعد از 3 ثانیه
   setTimeout(() => {
     toast.className = "toast";
   }, 3000);
 }
 
-// -------------------- جستجو محصولات --------------------
+// -------------------- جستجو --------------------
 function searchProducts() {
-  const query = document.getElementById("searchInput").value.toLowerCase();
+  const query = document.getElementById("searchInput").value.toLowerCase().trim();
   const grid = document.getElementById("product-grid");
 
   grid.innerHTML = "";
 
   // ترکیب همه محصولات از دسته‌ها
-  let allProducts = [];
+  searchResults = [];
   Object.keys(products).forEach(category => {
-    allProducts = allProducts.concat(products[category]);
+    (products[category] || []).forEach(p => {
+      searchResults.push({ ...p, _category: category }); // ذخیره‌ی دسته برای استفاده بعدی
+    });
   });
 
   // فیلتر بر اساس نام محصول
-  const filtered = allProducts.filter(p => p.name.toLowerCase().includes(query));
+  const filtered = searchResults.filter(p => p.name.toLowerCase().includes(query));
 
   // نمایش نتایج
   if (filtered.length === 0) {
@@ -459,47 +437,31 @@ function searchProducts() {
     filtered.forEach((p, i) => {
       grid.innerHTML += `
         <div class="product-card">
-          <img class="lazy" data-src="${p.image}" alt="${p.name}" class="product-image">
+          <img src="${p.image}" alt="${p.name}" class="product-image">
           <h3>${p.name}</h3>
           <p>${p.desc}</p>
           <span class="price">${p.price}</span>
           <div class="actions">
-            <button onclick="addToCart('all', ${i})">➕ افزودن</button>
+            <button onclick="addSearchResultToCart(${i})">➕ افزودن</button>
           </div>
         </div>
       `;
     });
-    // فعال‌سازی Lazy Loading دوباره
-    initLazyLoading();
   }
 }
-// تغییر در افزودن محصول
-function addToCart(category, index) {
-  const product = products[category][index];
+
+function addSearchResultToCart(index) {
+  // پیدا کردن آیتم واقعی از searchResults فیلتر شده‌ی فعلی
+  const query = document.getElementById("searchInput").value.toLowerCase().trim();
+  const filtered = searchResults.filter(p => p.name.toLowerCase().includes(query));
+  const product = filtered[index];
+  if (!product) return;
+
   cart.push(product);
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
+  bumpCartIcon();
   showToast(`${product.name} به سبد اضافه شد ✅`);
-}
-
-// تغییر در حذف محصول
-function removeFromCart(category, index) {
-  const product = products[category][index];
-  const cartIndex = cart.findIndex(item => item.name === product.name);
-  if (cartIndex !== -1) {
-    cart.splice(cartIndex, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    renderCart();
-    showToast(`${product.name} از سبد حذف شد ❌`);
-  }
-}
-
-// تغییر در پاک کردن کل سبد
-function clearCart() {
-  cart = [];
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
-  showToast("سبد خرید پاک شد 🗑️");
 }
 
 // -------------------- Scroll-to-top --------------------
@@ -507,10 +469,14 @@ const scrollTopBtn = document.getElementById("scrollTopBtn");
 
 // نمایش دکمه وقتی اسکرول کنیم
 window.addEventListener("scroll", () => {
-  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-    scrollTopBtn.style.display = "block";
-  } else {
-    scrollTopBtn.style.display = "none";
+  const scrolled = document.body.scrollTop > 200 || document.documentElement.scrollTop > 200;
+  scrollTopBtn.style.display = scrolled ? "block" : "none";
+
+  // افکت هدر هنگام اسکرول
+  const header = document.querySelector("header");
+  if (header) {
+    if (scrolled) header.classList.add("scrolled");
+    else header.classList.remove("scrolled");
   }
 });
 
@@ -518,3 +484,9 @@ window.addEventListener("scroll", () => {
 scrollTopBtn.addEventListener("click", () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 });
+
+// -------------------- حالت تاریک --------------------
+function toggleTheme() {
+  document.body.classList.toggle("dark-mode");
+  showToast(document.body.classList.contains("dark-mode") ? "حالت تاریک فعال شد 🌙" : "حالت روشن فعال شد ☀️");
+}

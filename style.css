@@ -1,8 +1,13 @@
 body {
-  font-family: 'vazirmatn', sans-serif;
+  font-family: 'Vazirmatn', sans-serif;
   font-size: 16px;
   background-color: var(--background-color);
   color: var(--secondary-color);
+}
+:root {
+  --background-color: #fdfdfd;
+  --primary-color: #ffffff;
+  --secondary-color: orange;
 }
 
 /* هدر */
@@ -123,7 +128,7 @@ button:hover {
   font-weight: bold;
   color: #d4af37;
 }
-#checkout {
+#checkout-form {
   box-shadow: 0 4px 12px rgba(255,140,0,0.2);
   border-radius: 8px;
 }
@@ -257,8 +262,7 @@ body.dark-mode h2 {
   background: #eee;
   border-radius: 8px;
   margin: 10px;
-  width: 200px;
-  height: 250px;
+  width: 100%;
   animation: pulse 1.5s infinite;
 }
 
